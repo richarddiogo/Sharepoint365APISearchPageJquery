@@ -83,18 +83,18 @@ function SearchComplete(data) {
             }
 
             html += '<li class="box-search-out ms-srch-item"><div class="BoxImg">\
-					<img src="' + img + '?RenditionID=10" alt="" />\
+                    <img src="' + img + '?RenditionID=10" alt="" />\
                 </div>\
                 <div class="InfosBox">\
-	                <div class="TituloBox">\
-	                <h3 class="Nome"><a href="/Lists/Colaboradores/Disp.aspx?ID=' + id + '">' + nome + '</a></h3>\
-		                <p class="Cargo">' + cargo + '</p>\
-	                </div>\
-	                 <div class="DadosBox">\
-	                 	<p><span><strong>Telefone:</strong> ' + celular + '</span></p>\
-		                <p>' + htmlFrente + ramal + htmlTras + ' </p>\
-		                <p><span><strong>Email:</strong> <a href="mailto:' + email + '" title="Enviar E-mail">' + email + '</a></span></p>\
-	                  </div>\
+                    <div class="TituloBox">\
+                    <h3 class="Nome"><a href="/Lists/Colaboradores/Disp.aspx?ID=' + id + '">' + nome + '</a></h3>\
+                        <p class="Cargo">' + cargo + '</p>\
+                    </div>\
+                     <div class="DadosBox">\
+                        <p><span><strong>Telefone:</strong> ' + celular + '</span></p>\
+                        <p>' + htmlFrente + ramal + htmlTras + ' </p>\
+                        <p><span><strong>Email:</strong> <a href="mailto:' + email + '" title="Enviar E-mail">' + email + '</a></span></p>\
+                      </div>\
                 </div></li>';
 
         });
@@ -222,7 +222,9 @@ function RenderFiltro(data, dataFilter, select) {
     $.each(data, function(i, d) {
         var title = this.Title;
         var query = this.Query;
+        
         title = this.Title;
+
         eval(dataFilter + ".push({'Title':'" + title + "' , 'Query':'" + query + "'})");
     });
 
@@ -256,4 +258,32 @@ function montarHtml(name) {
     $('[name="' + name + '"]').html(options);
 
     events();
+}
+
+function IsEmpty(string){
+    return string == "" || string == null || string == undefined;
+}
+
+function GetListItems(Library,Command,Done,Fail,Always){
+    var rootURL = (!IsEmpty(_spPageContextInfo.webAbsoluteUrl)) ? _spPageContextInfo.webAbsoluteUrl : siteCollectionURL;
+
+    $.ajax({
+        url: rootURL + "/_api/lists/getbytitle('"+ Library +"')/items?" + Command,
+        method: "GET",
+        headers: { "Accept": "application/json; odata=verbose" }
+        
+    })
+    .done(function (data) {
+        Done(data);            
+     })
+    .fail(function (data) {
+        Fail(data);
+    })
+    .always(function(data){
+        try{
+            Always(data);
+        }
+        catch(e){}
+    });
+
 }
