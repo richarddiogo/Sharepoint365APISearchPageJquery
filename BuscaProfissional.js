@@ -222,13 +222,7 @@ function RenderFiltro(data, dataFilter, select) {
     $.each(data, function(i, d) {
         var title = this.Title;
         var query = this.Query;
-        //try{
-        //if(CurrentLanguageLCID == 'en-US'){
-        //if( this.TitleEN != 'null' && this.TitleEN != undefined)
         title = this.Title;
-        //}
-        //}catch(e){}
-
         eval(dataFilter + ".push({'Title':'" + title + "' , 'Query':'" + query + "'})");
     });
 
